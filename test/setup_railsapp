@@ -63,7 +63,7 @@ mkdir -p tmp/gems
 
 . test/init_variables
 
-if $rbenv_which bundle ; then
+if which bundle ; then
   echo Bundler is installed
 else
   gem install bundler ${BUNDLER_VERSION:+-v ${BUNDLER_VERSION}}
