@@ -70,6 +70,8 @@ else
   $rehash
 fi
 
+gem install smarter_bundler
+
 echo "Running bundle with BUNDLE_GEMFILE=$BUNDLE_GEMFILE ..."
 if ! smarter_bundle ; then
     echo "Test aborted (missing required gems)"
@@ -202,27 +204,27 @@ if defined? HealthCheck
     config.origin_ip_whitelist = ENV['IP_WHITELIST'].split(',') unless ENV['IP_WHITELIST'].blank?
     config.basic_auth_username = ENV['AUTH_USER'] unless ENV['AUTH_USER'].blank?
     config.basic_auth_password = ENV['AUTH_PASSWORD'] unless ENV['AUTH_PASSWORD'].blank?
-  
+
     config.add_custom_check do
       File.exists?("$custom_file") ? '' : '$custom_file is missing!'
     end
-  
+
     config.add_custom_check('pass') do
       ''
     end
-  
+
     config.on_failure do |checks, msg|
       File.open('tmp/health_check_failure.txt', 'w') do |f|
         f.puts "FAILED: #{checks}, MESSAGE: #{msg}"
       end
     end
-  
+
     config.on_success do |checks|
       File.open('tmp/health_check_success.txt', 'w') do |f|
         f.puts "PASSED: #{checks}"
       end
     end
-  
+
     config.include_error_in_response_body = ENV['HIDE_ERROR_RESPONSE'].to_s !~ /^[1tTyY]/
   end
 end
@@ -271,7 +273,7 @@ if egrep -q REQUIRED ${INITIAL_BUNDLE_GEMFILE} ; then
   echo Adding Required gems
   egrep REQUIRED ${INITIAL_BUNDLE_GEMFILE} | tee -a Gemfile
 else
-  echo No required gems to be added to Gemfile 
+  echo No required gems to be added to Gemfile
 fi
 
 echo
@@ -322,7 +324,7 @@ do
       echo ======== config/environments/$e.rb ================
       sed -i.bak -e 's/config.serve_static_assets = false/config.serve_static_assets = true   # NOTE: health_check test: changed to true/'  \
         -e 's/config.active_record.migration_error = :page_load/# & # NOTE: health_check test: commented out/'  \
-        config/environments/$e.rb 
+        config/environments/$e.rb
       cat config/environments/$e.rb || true
       echo
     fi
@@ -330,17 +332,17 @@ done
 
 if egrep -q 'bootsnap.setup' config/boot.rb  ; then
   echo Commenting out bootsnap from config/boot.rb
-  sed -i.bak -e 's/^\(.*bootsnap.setup\)/# \1/' config/boot.rb 
+  sed -i.bak -e 's/^\(.*bootsnap.setup\)/# \1/' config/boot.rb
   echo "============== $PWD/config/boot.rb ============="
   cat config/boot.rb
   echo ==================================================
 fi
 rm -rf tmp/cache/bootsnap*
-echo 
+echo
 
 echo "============== $PWD/config/environment.rb ============="
 cat config/environment.rb
-echo 
+echo
 
 echo =========================================================
 case $db in
@@ -350,7 +352,7 @@ case $db in
             echo
             export RAILS_ENV=$e RACK_ENV=$e
             echo "Jruby requires the database to be created before the server is started: running RAILS_ENV=$e rake db:migrate"
-            $rake db:migrate 
+            $rake db:migrate
             echo
       done
       ;;
@@ -435,11 +437,11 @@ class ExampleController < ApplicationController
   def index
     render plain: 'example page'
   end
-  
+
   def catchall
     render plain: 'catch all route'
   end
-  
+
 end
 
 EOF
