@@ -23,5 +23,5 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.2.2'
   gem.add_dependency(%q<railties>, [">= 5.0"])
   gem.add_development_dependency(%q<rake>)
-  gem.add_development_dependency(%q<rspec>)
+  gem.add_development_dependency(%q<rspec-rails>)
 end
