@@ -128,22 +128,22 @@ start_server()
     case "$actual_rails_version" in
     *' '[12345].*)
         ;;
-    *) 
+    *)
         server_arg="-u $server_arg"
         ;;
     esac
     echo "start_server called using: `env | egrep '^RAILS|^RACK|^PATH='` $bundle_prefix $server_arg"
     case "$server_arg" in
-    *puma) 
+    *puma)
         $bundle_prefix puma -b tcp://127.0.0.1:$port &
         ;;
-    *passenger) 
+    *passenger)
         $bundle_prefix passenger start -p $port &
         ;;
-    *thin) 
+    *thin)
         $bundle_prefix thin start -p $port &
         ;;
-    *unicorn) 
+    *unicorn)
         $bundle_prefix unicorn_rails -l 127.0.0.1:$port &
         ;;
     *)
@@ -251,7 +251,9 @@ common_tests()
 {
 
     test_no=$1
-
+#
+# route_prefixが期待通り反映されているかのテスト
+#
     if [ -z "$run_test" ] || [ $test_no == "$run_test" ]; then
         echo "${test_no}[line $LINENO]: CHECKING routes exist..."
         $rake routes | tee /tmp/t$$
@@ -264,6 +266,8 @@ common_tests()
         echo
     fi
 
+# テスト用のRailsアプリケーションの静的ファイル配信が有効ならそれが有効なのかのチェックをしている
+# これって単にRailsの機能をテストしているだけでは？？？
     test_no=`expr 1 + $test_no`
     if [ -z "$run_test" ] || [ $test_no == "$run_test" ]; then
         echo "${test_no}[line $LINENO]: TESTING can get a static file ..."
@@ -278,8 +282,14 @@ common_tests()
         esac
         echo
     fi
-
+#
+# on_success, on_failureで生成されるファイルを先んじて削除
+#
     rm -f tmp/health_check_success.txt tmp/health_check_failure.txt
+
+
+# example コントローラにアクセスしているけどこれ必要？
+# 一応 https://github.com/Purple-Devs/health_check/blob/gh-actions/test/setup_railsapp#L438-L438 に設定してあるけど不要では
 
     test_no=`expr 1 + $test_no`
     if [ -z "$run_test" ] || [ $test_no == "$run_test" ]; then
@@ -288,24 +298,30 @@ common_tests()
         echo
     fi
 
+# こっちも同様で、railsの機能をテストしているので不要
+#
     test_no=`expr 1 + $test_no`
     if [ -z "$run_test" ] || [ $test_no == "$run_test" ]; then
         echo "${test_no}[line $LINENO]: TESTING direct call to catchall method on example controller ..."
         $testurl ${host}/example/catchall 200 text/plain 'catch all route'
         echo
     fi
-
+#
+# health_checkの成功/失敗のフックは一回テストしたら良さそう
+#
     if [ -f tmp/health_check_success.txt ] ; then
-        echo "FAIL tmp/health_check_success.txt exists on line $LINENO" 
+        echo "FAIL tmp/health_check_success.txt exists on line $LINENO"
     else
-        echo "PASS tmp/health_check_success.txt is missing as expected on line $LINENO" 
+        echo "PASS tmp/health_check_success.txt is missing as expected on line $LINENO"
     fi
     if [ -f tmp/health_check_failure.txt ] ; then
-        echo "FAIL tmp/health_check_failure.txt exists on line $LINENO" 
+        echo "FAIL tmp/health_check_failure.txt exists on line $LINENO"
     else
-        echo "PASS tmp/health_check_failure.txt is missing as expected on line $LINENO" 
+        echo "PASS tmp/health_check_failure.txt is missing as expected on line $LINENO"
     fi
 
+# migrationのチェックをテストしているけど、これってテストなのかな
+# 成功失敗どちらでもOKにしている
     test_no=`expr 1 + $test_no`
     if [ -z "$run_test" ] || [ $test_no == "$run_test" ]; then
         echo "${test_no}[line $LINENO]: TESTING ${route_prefix}/migration should pass with no database migrations ..."
@@ -313,19 +329,21 @@ common_tests()
         rm -f tmp/health_check_success.txt tmp/health_check_failure.txt
         $testurl ${host}/${route_prefix}/migration 200 text/plain $success
         if [ -f tmp/health_check_success.txt ] ; then
-            echo "PASS tmp/health_check_success.txt exists as expected on line $LINENO" 
+            echo "PASS tmp/health_check_success.txt exists as expected on line $LINENO"
             cat tmp/health_check_success.txt
         else
-            echo "FAIL tmp/health_check_success.txt is missing on line $LINENO" 
+            echo "FAIL tmp/health_check_success.txt is missing on line $LINENO"
         fi
         if [ -f tmp/health_check_failure.txt ] ; then
-            echo "FAIL tmp/health_check_failure.txt exists on line $LINENO" 
+            echo "FAIL tmp/health_check_failure.txt exists on line $LINENO"
         else
-            echo "PASS tmp/health_check_failure.txt is missing as expected on line $LINENO" 
+            echo "PASS tmp/health_check_failure.txt is missing as expected on line $LINENO"
         fi
         echo
     fi
-
+#
+# 未実行のmigrationファイルを用意してヘルスチェックを失敗させている
+#
     test_no=`expr 1 + $test_no`
     if [ -z "$run_test" ] || [ $test_no == "$run_test" ]; then
         echo "${test_no}[line $LINENO]: TESTING ${route_prefix}/migration should fail without initial database migration ..."
@@ -334,15 +352,15 @@ common_tests()
         rm -f tmp/health_check_success.txt tmp/health_check_failure.txt
         $testurl ${host}/${route_prefix}/migration 550 text/plain failed
         if [ -f tmp/health_check_success.txt ] ; then
-            echo "FAIL tmp/health_check_success.txt exists on line $LINENO" 
+            echo "FAIL tmp/health_check_success.txt exists on line $LINENO"
         else
-            echo "PASS tmp/health_check_success.txt is missing as expected on line $LINENO" 
+            echo "PASS tmp/health_check_success.txt is missing as expected on line $LINENO"
         fi
         if [ -f tmp/health_check_failure.txt ] ; then
-            echo "PASS tmp/health_check_failure.txt exists as expected on line $LINENO" 
+            echo "PASS tmp/health_check_failure.txt exists as expected on line $LINENO"
             cat tmp/health_check_failure.txt
         else
-            echo "FAIL tmp/health_check_failure.txt is missing on line $LINENO" 
+            echo "FAIL tmp/health_check_failure.txt is missing on line $LINENO"
         fi
         echo
     fi
@@ -583,7 +601,7 @@ common_tests()
     test_no=`expr 1 + $test_no`
     if [ -z "$run_test" ] || [ $test_no == "$run_test" ]; then
         echo "${test_no}[line $LINENO]: TESTING log files to check for deprecation warnings ..."
-        if egrep ' is deprecated|DEPRECATION WARNING' $railsapp/log/[tp][er][so][td]*.log 
+        if egrep ' is deprecated|DEPRECATION WARNING' $railsapp/log/[tp][er][so][td]*.log
         then
             echo Found deprecation warnings - failed test
             exit 99
