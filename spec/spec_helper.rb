@@ -3,7 +3,7 @@ require 'rails'
 require 'rails/all'
 require 'health_check'
 Bundler.require
-require 'fake_app'
+require_relative './dummy/fake_app'
 require 'rspec/rails'
 require 'fake_smtp_server'
 

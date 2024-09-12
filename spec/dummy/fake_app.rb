@@ -19,7 +19,7 @@ HealthCheck.setup do |config|
   config.basic_auth_password = ENV['AUTH_PASSWORD'] unless ENV['AUTH_PASSWORD'].blank?
 
   config.add_custom_check do
-    File.exist?("spec/custom_file") ? '' : 'custom_file is missing!'
+    File.exist?("spec/dummy/tmp/custom_file") ? '' : 'custom_file is missing!'
   end
 
   config.add_custom_check('pass') do
