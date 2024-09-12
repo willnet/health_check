@@ -130,28 +130,3 @@ class FakeSmtpServer
   end
 end
 
-FakeSmtpServer.new(3555).start
-
-puts 'fake_smtp_server: Exiting now the conversation has finished.'
-exit 0
-
-# Tested with irb script:
-# require 'net/smtp'
-# 
-# status = ''
-# begin
-#   if @skip_external_checks
-#     status = '250'
-#   else
-#     smtp = Net::SMTP.new('localhost', 3555)
-#     smtp.enable_starttls 
-#     smtp.open_timeout = 10
-#     smtp.read_timeout = 10
-#     smtp.start('domain', 'user_name', 'password', :plain) do
-#       status = smtp.helo('domain').status
-#     end
-#   end
-# rescue Exception => ex
-#   status = ex.to_s
-# end
-# (status =~ /^250/) ? 'PASS' : "FAILED SMTP: #{status || 'unexpected error'}. "
