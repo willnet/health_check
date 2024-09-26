@@ -7,4 +7,4 @@ development:
 
 test:
   <<: *default
-  database: ":memory:"
+  database: db/test.sqlite3
