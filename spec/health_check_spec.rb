@@ -2,8 +2,10 @@ require 'spec_helper'
 
 RSpec.describe HealthCheck, type: :request do
   it 'works' do
+    start_smtp_server
     get '/health_check'
     expect(response).to be_ok
+    stop_smtp_server
   end
 
   context '/migration' do
