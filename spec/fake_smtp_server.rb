@@ -59,12 +59,19 @@ class FakeSmtpServer
     close
   end
 
+  def finish
+    sleep 1
+    @socket.close
+  end
+
   private
 
   def close
     @client.close unless @client.nil?
     @orig_client.close unless @orig_client.nil?
   end
+
+
 
   def send(line)
     @client.puts line

@@ -7,9 +7,10 @@ FakeApp.config.action_mailer.smtp_settings = { address: "localhost", port: 3555,
 FakeApp.initialize!
 ON_SUCCESS_FILE_PATH = 'tmp/health_check_success.txt'
 ON_FAILURE_FILE_PATH = 'tmp/health_check_failure.txt'
+CUSTOM_CHECK_FILE_PATH = 'spec/dummy/tmp/custom_file'
 
 HealthCheck.setup do |config|
-  config.success = "$success"
+  config.success = "custom_success_message"
   config.smtp_timeout = 60.0
   config.http_status_for_error_text = 550
   config.http_status_for_error_object = 555
@@ -19,7 +20,7 @@ HealthCheck.setup do |config|
   config.basic_auth_password = ENV['AUTH_PASSWORD'] unless ENV['AUTH_PASSWORD'].blank?
 
   config.add_custom_check do
-    File.exist?("spec/dummy/tmp/custom_file") ? '' : 'custom_file is missing!'
+    File.exist?(CUSTOM_CHECK_FILE_PATH) ? '' : 'custom_file is missing!'
   end
 
   config.add_custom_check('pass') do

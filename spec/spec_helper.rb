@@ -14,15 +14,23 @@ RSpec.configure do |config|
   end
 end
 
-def start_smtp_server
-  Thread.start do
-    FakeSmtpServer.new(3555).start
+def start_smtp_server(&block)
+  th = Thread.start do
+    server = FakeSmtpServer.new(3555)
+    server.start
+    server.finish
   end
   sleep 1
-end
-
-def stop_smtp_server
+  block.call
   socket = TCPSocket.open('localhost', 3555)
   socket.write('QUIT')
   socket.close
+  th.join
+end
+
+def enable_custom_check(&block)
+  File.write(CUSTOM_CHECK_FILE_PATH, 'hello')
+  block.call
+ensure
+  FileUtils.rm(CUSTOM_CHECK_FILE_PATH)
 end
