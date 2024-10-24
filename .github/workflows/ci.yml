@@ -9,27 +9,48 @@ jobs:
 
     strategy:
       matrix:
-        middleware: ['true', 'false']
+        middleware:
+          - 'true'
+          - 'false'
         include:
-          - { ruby: '2.2', gemfile: './test/rails_5.0.gemfile' }
-          - { ruby: '2.3', gemfile: './test/rails_5.0.gemfile' }
-          - { ruby: '2.2', gemfile: './test/rails_5.1.gemfile' }
-          - { ruby: '2.3', gemfile: './test/rails_5.1.gemfile' }
-          - { ruby: '2.4', gemfile: './test/rails_5.1.gemfile' }
-          - { ruby: '2.5', gemfile: './test/rails_6.0.gemfile' }
-          - { ruby: '2.6', gemfile: './test/rails_6.0.gemfile' }
-          - { ruby: '2.5', gemfile: './test/rails_6.1.gemfile' }
-          - { ruby: '2.6', gemfile: './test/rails_6.1.gemfile' }
-          - { ruby: '2.7', gemfile: './test/rails_6.1.gemfile' }
-          - { ruby: '3.0', gemfile: './test/rails_6.1.gemfile' }
-          - { ruby: '2.7', gemfile: './test/rails_7.0.gemfile' }
-          - { ruby: '3.0', gemfile: './test/rails_7.0.gemfile' }
-          - { ruby: '3.1', gemfile: './test/rails_7.0.gemfile' }
-          - { ruby: '2.7', gemfile: './test/rails_7.1.gemfile' }
-          - { ruby: '3.0', gemfile: './test/rails_7.1.gemfile' }
-          - { ruby: '3.1', gemfile: './test/rails_7.1.gemfile' }
-          - { ruby: '3.2', gemfile: './test/rails_7.1.gemfile' }
-          - { ruby: '3.3', gemfile: './test/rails_7.1.gemfile' }
+          - ruby: '2.2'
+            gemfile: './test/rails_5.0.gemfile'
+          - ruby: '2.3'
+            gemfile: './test/rails_5.0.gemfile'
+          - ruby: '2.2'
+            gemfile: './test/rails_5.1.gemfile'
+          - ruby: '2.3'
+            gemfile: './test/rails_5.1.gemfile'
+          - ruby: '2.4'
+            gemfile: './test/rails_5.1.gemfile'
+          - ruby: '2.5'
+            gemfile: './test/rails_6.0.gemfile'
+          - ruby: '2.6'
+            gemfile: './test/rails_6.0.gemfile'
+          - ruby: '2.5'
+            gemfile: './test/rails_6.1.gemfile'
+          - ruby: '2.6'
+            gemfile: './test/rails_6.1.gemfile'
+          - ruby: '2.7'
+            gemfile: './test/rails_6.1.gemfile'
+          - ruby: '3.0'
+            gemfile: './test/rails_6.1.gemfile'
+          - ruby: '2.7'
+            gemfile: './test/rails_7.0.gemfile'
+          - ruby: '3.0'
+            gemfile: './test/rails_7.0.gemfile'
+          - ruby: '3.1'
+            gemfile: './test/rails_7.0.gemfile'
+          - ruby: '2.7'
+            gemfile: './test/rails_7.1.gemfile'
+          - ruby: '3.0'
+            gemfile: './test/rails_7.1.gemfile'
+          - ruby: '3.1'
+            gemfile: './test/rails_7.1.gemfile'
+          - ruby: '3.2'
+            gemfile: './test/rails_7.1.gemfile'
+          - ruby: '3.3'
+            gemfile: './test/rails_7.1.gemfile'
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
       MIDDLEWARE: ${{ matrix.middleware }}
