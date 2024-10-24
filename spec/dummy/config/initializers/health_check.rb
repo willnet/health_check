@@ -9,9 +9,6 @@ HealthCheck.setup do |config|
   config.http_status_for_error_object = 555
   config.uri = 'custom_route_prefix'
 
-  config.basic_auth_username = ENV['AUTH_USER'] unless ENV['AUTH_USER'].blank?
-  config.basic_auth_password = ENV['AUTH_PASSWORD'] unless ENV['AUTH_PASSWORD'].blank?
-
   config.add_custom_check do
     File.exist?(CUSTOM_CHECK_FILE_PATH) ? '' : 'custom_file is missing!'
   end

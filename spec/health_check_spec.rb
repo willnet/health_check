@@ -231,6 +231,61 @@ RSpec.describe HealthCheck, type: :request do
   end
 
   context 'whitelisted ip' do
+    after { HealthCheck.origin_ip_whitelist.clear }
 
+    it 'works with access from valid ip address' do
+      HealthCheck.origin_ip_whitelist << '127.0.0.1'
+      get '/custom_route_prefix/site'
+      expect(response).to be_ok
+    end
+
+    it 'fails with access from invalid ip address' do
+      HealthCheck.origin_ip_whitelist << '123.123.123.123'
+      get '/custom_route_prefix/site'
+      expect(response.status).to eq(403)
+    end
+
+    it 'does not affect paths other than health_check' do
+      HealthCheck.origin_ip_whitelist << '123.123.123.123'
+      get '/example'
+      expect(response).to be_ok
+    end
+  end
+
+  context 'basic auth' do
+    before do
+      HealthCheck.basic_auth_username = 'username'
+      HealthCheck.basic_auth_password = 'password'
+    end
+
+    after do
+      HealthCheck.basic_auth_username = nil
+      HealthCheck.basic_auth_password = nil
+    end
+
+    it 'works with valid credentials' do
+      get '/custom_route_prefix/site', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials('username', 'password') }
+      expect(response).to be_ok
+    end
+
+    it 'fails with wrong password' do
+      get '/custom_route_prefix/site', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials('username', 'wrong_password') }
+      expect(response.status).to eq(401)
+    end
+
+    it 'fails with wrong username' do
+      get '/custom_route_prefix/site', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials('wrong_username', 'password') }
+      expect(response.status).to eq(401)
+    end
+
+    it 'fails with no credentials' do
+      get '/custom_route_prefix/site'
+      expect(response.status).to eq(401)
+    end
+
+    it 'does not affect paths other than health_check' do
+      get '/example'
+      expect(response).to be_ok
+    end
   end
 end
