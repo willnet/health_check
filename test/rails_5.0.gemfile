@@ -2,8 +2,6 @@
 
 source 'https://rubygems.org'
 
-ruby RUBY_VERSION < '2.2.2' ? '2.2.2' : RUBY_VERSION
-
 gem 'rails', '~> 5.0.0'
 gem 'rake', '>= 0.8.7'
 
@@ -18,7 +16,7 @@ group :development, :test do
   end
   gem 'shoulda'
 end
-  
+
 # redis based checks
 gem 'sidekiq', '~> 5.2.9', require: !ENV['SIDEKIQ'].nil? # REQUIRED
 gem 'redis', '~> 4.0.3', require: !ENV['REDIS_URL'].nil? # REQUIRED
