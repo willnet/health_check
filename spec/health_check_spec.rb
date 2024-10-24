@@ -71,7 +71,7 @@ RSpec.describe HealthCheck, type: :request do
     end
 
     it 'fails with pending migration files' do
-      FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/')
+      FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/9_create_countries.rb')
       FileUtils.cd(FakeApp.config.root) do
         get '/custom_route_prefix/migration'
       end
@@ -79,7 +79,7 @@ RSpec.describe HealthCheck, type: :request do
     end
 
     it 'works with applied migration files' do
-      FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/')
+      FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/9_create_countries.rb')
       FileUtils.cd(FakeApp.config.root) do
         ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths).migrate
         get '/custom_route_prefix/migration'
@@ -104,7 +104,7 @@ RSpec.describe HealthCheck, type: :request do
     end
 
     it 'works with valid database' do
-      FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/')
+      FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/9_create_countries.rb')
       FileUtils.cd(FakeApp.config.root) do
         ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths).migrate
         get '/custom_route_prefix/database'
