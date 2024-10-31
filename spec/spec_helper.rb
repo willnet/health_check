@@ -34,3 +34,19 @@ def enable_custom_check(&block)
 ensure
   FileUtils.rm(CUSTOM_CHECK_FILE_PATH) if File.exist?(CUSTOM_CHECK_FILE_PATH)
 end
+
+def disconnect_database
+  if  Gem::Version.new(Rails.version) >= Gem::Version.new('7.1.0')
+    ActiveRecord::Tasks::DatabaseTasks.migration_connection.disconnect!
+  else
+    ActiveRecord::Base.connection.disconnect!
+  end
+end
+
+def reconnect_database
+  if Gem::Version.new(Rails.version) >= Gem::Version.new('7.1.0')
+    ActiveRecord::Tasks::DatabaseTasks.migration_connection.reconnect!
+  else
+    ActiveRecord::Base.establish_connection
+  end
+end

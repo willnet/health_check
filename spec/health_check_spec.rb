@@ -56,6 +56,7 @@ RSpec.describe HealthCheck, type: :request do
   end
 
   context '/custom_route_prefix/migration' do
+    before { reconnect_database }
     after do
       Dir.glob('spec/dummy/db/migrate/*').each do |f|
         FileUtils.rm(f)
@@ -113,7 +114,7 @@ RSpec.describe HealthCheck, type: :request do
     end
 
     it 'fails with invalid database' do
-      ActiveRecord::Tasks::DatabaseTasks.migration_connection.disconnect!
+      disconnect_database
       Rails.root.join('db/test.sqlite3').write('invalid')
       get '/custom_route_prefix/database'
       expect(response.status).to eq(550)

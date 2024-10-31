@@ -32,3 +32,4 @@ tmp
 
 spec/dummy/tmp/*
 !spec/dummy/tmp/.keep
+spec/dummy/db/*.sqlite3
