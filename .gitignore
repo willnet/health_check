@@ -16,7 +16,6 @@ spec/reports
 spec/dummy/log/*
 test/tmp
 test/version_tmp
-tmp
 .ruby-version
 
 ## PROJECT::SPECIFIC
@@ -30,3 +29,6 @@ ubuntu*console.log
 
 # See: https://gist.github.com/ianheggie/9327010
 # for Global git ignore for OS/IDE/temp/backup files
+
+spec/dummy/tmp/*
+!spec/dummy/tmp/.keep
