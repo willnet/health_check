@@ -32,5 +32,5 @@ def enable_custom_check(&block)
   File.write(CUSTOM_CHECK_FILE_PATH, 'hello')
   block.call
 ensure
-  FileUtils.rm(CUSTOM_CHECK_FILE_PATH)
+  FileUtils.rm(CUSTOM_CHECK_FILE_PATH) if File.exist?(CUSTOM_CHECK_FILE_PATH)
 end
