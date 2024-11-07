@@ -96,7 +96,6 @@ class FakeSmtpServer
       context.key = key
       context.cert = cert
       context.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      context.min_version = nil
       context
     end
   end
