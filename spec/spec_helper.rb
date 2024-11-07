@@ -1,8 +1,3 @@
-Bundler.setup
-require 'rails'
-require 'rails/all'
-require 'health_check'
-Bundler.require
 require_relative './dummy/fake_app'
 require 'rspec/rails'
 require 'fake_smtp_server'
@@ -49,4 +44,8 @@ def reconnect_database
   else
     ActiveRecord::Base.establish_connection
   end
+end
+
+def db_migrate
+  system 'RAILS_ENV=test bundle exec rake db:migrate'
 end

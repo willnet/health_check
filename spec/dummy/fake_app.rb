@@ -1,3 +1,9 @@
+Bundler.setup
+require 'rails'
+require 'rails/all'
+require 'health_check'
+Bundler.require
+
 FakeApp = Class.new(Rails::Application)
 ENV['RAILS_ENV'] ||= 'test'
 FakeApp.config.session_store :cookie_store, key: '_myapp_session'

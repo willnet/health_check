@@ -61,6 +61,7 @@ RSpec.describe HealthCheck, type: :request do
       Dir.glob('spec/dummy/db/migrate/*').each do |f|
         FileUtils.rm(f)
       end
+      FileUtils.rm('spec/dummy/db/schema.rb') if File.exist?('spec/dummy/db/schema.rb')
       FileUtils.cd(FakeApp.config.root) do
         ActiveRecord::Tasks::DatabaseTasks.drop_current
       end
@@ -82,7 +83,7 @@ RSpec.describe HealthCheck, type: :request do
     it 'works with applied migration files' do
       FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/9_create_countries.rb')
       FileUtils.cd(FakeApp.config.root) do
-        ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths).migrate
+        db_migrate
         get '/custom_route_prefix/migration'
       end
       expect(response).to be_ok
@@ -94,6 +95,7 @@ RSpec.describe HealthCheck, type: :request do
       Dir.glob('spec/dummy/db/migrate/*').each do |f|
         FileUtils.rm(f)
       end
+      FileUtils.rm('spec/dummy/db/schema.rb') if File.exist?('spec/dummy/db/schema.rb')
       FileUtils.cd(FakeApp.config.root) do
         ActiveRecord::Tasks::DatabaseTasks.drop_current
       end
@@ -107,7 +109,7 @@ RSpec.describe HealthCheck, type: :request do
     it 'works with valid database' do
       FileUtils.cp('spec/fixtures/migrate/9_create_countries.rb', 'spec/dummy/db/migrate/9_create_countries.rb')
       FileUtils.cd(FakeApp.config.root) do
-        ActiveRecord::MigrationContext.new(ActiveRecord::Migrator.migrations_paths).migrate
+        db_migrate
         get '/custom_route_prefix/database'
       end
       expect(response).to be_ok
