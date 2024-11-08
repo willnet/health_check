@@ -13,16 +13,14 @@ lib/bundler/man
 pkg
 rdoc
 spec/reports
+spec/dummy/db/*.sqlite3*
 spec/dummy/log/*
-test/tmp
-test/version_tmp
 .ruby-version
 
 ## PROJECT::SPECIFIC
 bin/
-test/bin/
 railsapps/
-test/*.gemfile.lock
+gemfiles/*.gemfile.lock
 ,*
 .vagrant
 ubuntu*console.log
