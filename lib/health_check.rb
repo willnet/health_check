@@ -124,7 +124,9 @@ require 'health_check/redis_health_check'
 require 'health_check/elasticsearch_health_check'
 require 'health_check/sidekiq_health_check'
 require 'health_check/utils'
-require 'health_check/health_check_controller'
+ActiveSupport.on_load(:action_controller) do
+  require 'health_check/health_check_controller'
+end
 require 'health_check/health_check_routes'
 require 'health_check/middleware_health_check'
 require 'health_check/rabbitmq_health_check'
