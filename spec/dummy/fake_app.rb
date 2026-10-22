@@ -1,4 +1,6 @@
 Bundler.setup
+# Rails 6.0 and 6.1 rely on logger being loaded before ActiveSupport.
+require 'logger'
 require 'rails'
 require 'rails/all'
 require 'health_check'
