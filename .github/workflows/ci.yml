@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
@@ -54,6 +54,24 @@ jobs:
           - { ruby: '3.2', gemfile: './gemfiles/rails_7.2.gemfile', middleware: 'false' }
           - { ruby: '3.3', gemfile: './gemfiles/rails_7.2.gemfile', middleware: 'true' }
           - { ruby: '3.3', gemfile: './gemfiles/rails_7.2.gemfile', middleware: 'false' }
+          - { ruby: '3.4', gemfile: './gemfiles/rails_7.2.gemfile', middleware: 'true' }
+          - { ruby: '3.4', gemfile: './gemfiles/rails_7.2.gemfile', middleware: 'false' }
+          - { ruby: '3.2', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'true' }
+          - { ruby: '3.2', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'false' }
+          - { ruby: '3.3', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'true' }
+          - { ruby: '3.3', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'false' }
+          - { ruby: '3.4', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'true' }
+          - { ruby: '3.4', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'false' }
+          - { ruby: '4.0', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'true' }
+          - { ruby: '4.0', gemfile: './gemfiles/rails_8.0.gemfile', middleware: 'false' }
+          - { ruby: '3.2', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'true' }
+          - { ruby: '3.2', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'false' }
+          - { ruby: '3.3', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'true' }
+          - { ruby: '3.3', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'false' }
+          - { ruby: '3.4', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'true' }
+          - { ruby: '3.4', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'false' }
+          - { ruby: '4.0', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'true' }
+          - { ruby: '4.0', gemfile: './gemfiles/rails_8.1.gemfile', middleware: 'false' }
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
       MIDDLEWARE: ${{ matrix.middleware }}
