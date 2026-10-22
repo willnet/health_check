@@ -79,11 +79,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Ruby 2.2 without Bundler
+        if: matrix.ruby == '2.2'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler: none
+
+      - name: Update RubyGems for Ruby 2.2
+        if: matrix.ruby == '2.2'
+        run: |
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/rubygems-update-2.7.11.gem" https://rubygems.org/downloads/rubygems-update-2.7.11.gem
+          gem install --local "$RUNNER_TEMP/rubygems-update-2.7.11.gem" --no-document
+          update_rubygems --no-document
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          rubygems: ${{ matrix.ruby == '2.2' && '2.7.11' || 'default' }}
           bundler-cache: true
 
       - name: Run tests
